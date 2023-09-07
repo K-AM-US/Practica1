@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Practica 1</string>
+
+    <string-array name="spinnerOpt">
+        <item>Brit Pop</item>
+        <item>Rock</item>
+        <item>Metal</item>
+        <item>House</item>
+        <item>Electronic</item>
+        <item>Indie</item>
+        <item>Jazz</item>
+    </string-array>
+</resources>
