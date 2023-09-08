@@ -4,24 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp" >
+    android:padding="10dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/albumCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="30dp"
+        app:cardBackgroundColor="@color/cardViewBackground"
         app:cardCornerRadius="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:cardBackgroundColor="@color/cardViewBackground">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <!--<ImageView
                 android:id="@+id/albumImage"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
@@ -31,7 +31,17 @@
                 android:src="@mipmap/ic_launcher"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />-->
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/albumImage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:riv_corner_radius="30dp" />
 
             <TextView
                 android:id="@+id/albumTitle"
@@ -50,11 +60,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:textSize="18sp"
                 android:textColor="@color/white"
+                android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@id/albumImage"
                 app:layout_constraintTop_toBottomOf="@id/albumTitle"
-                tools:text="Artist"/>
+                tools:text="Artist" />
 
             <TextView
                 android:id="@+id/albumGenre"
@@ -62,11 +72,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="5dp"
-                android:textSize="15sp"
+                android:layout_marginBottom="15dp"
                 android:textColor="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/albumArtist"
+                android:textSize="15sp"
                 app:layout_constraintStart_toEndOf="@id/albumImage"
-                tools:text="Genre"/>
+                app:layout_constraintTop_toBottomOf="@id/albumArtist"
+                app:layout_constraintBottom_toBottomOf="parent
+"
+                tools:text="Genre" />
 
             <TextView
                 android:id="@+id/albumYear"
@@ -74,21 +87,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/albumTitle"
-                android:textSize="18sp"
-                tools:text="Year"/>
+                tools:text="Year" />
 
             <TextView
                 android:id="@+id/albumSongs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/albumYear"
-                tools:text="Songs: "/>
+                tools:text="Songs: " />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

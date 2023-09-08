@@ -9,7 +9,7 @@ class AlbumRepository(private val albumDAO: AlbumDAO) {
         albumDAO.insertAlbum(album)
     }
 
-    suspend fun insertAlbum(title: String, artist: String, year: String, songs: Int, genre: String){
+    suspend fun insertAlbum(title: String, artist: String, year: String, songs: String, genre: String){
         albumDAO.insertAlbum(AlbumEntity(albumTitle = title, albumArtist = artist, albumYear = year, albumSongs = songs, albumGenre = genre))
     }
 

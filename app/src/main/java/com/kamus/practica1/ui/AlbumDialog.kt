@@ -6,9 +6,16 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
+import com.kamus.practica1.R
 import com.kamus.practica1.application.AlbumsDBApp
 import com.kamus.practica1.data.AlbumRepository
 import com.kamus.practica1.data.db.model.AlbumEntity
@@ -23,43 +30,67 @@ class AlbumDialog(
         albumArtist = "",
         albumGenre = "",
         albumYear = "",
-        albumSongs = 0
+        albumSongs = ""
     ),
     private val updateUI: () -> Unit,
     private val message: (String) -> Unit
 ): DialogFragment() {
     private var _binding: AlbumDialogBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var builder: AlertDialog.Builder
     private lateinit var dialog: Dialog
-
     private var saveButton: Button? = null
+    private lateinit var spinner: Spinner
+    private var spinnerSelectedOption: String? = null
+    private var spinnerSelectedId: Int = 0
 
     private lateinit var repository: AlbumRepository
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         _binding = AlbumDialogBinding.inflate(requireActivity().layoutInflater)
-
         repository = (requireContext().applicationContext as AlbumsDBApp).repository
-
         builder = AlertDialog.Builder(requireContext())
-
+        
         binding.apply {
             tfAlbumTitle.setText(album.albumTitle)
             tfAlbumArtist.setText(album.albumArtist)
             tfAlbumYear.setText(album.albumYear)
-            tfAlbumSongs.setText(album.albumSongs.toString())
+            tfAlbumSongs.setText(album.albumSongs)
+            dialogImage.setImageResource(imageSelection(album.albumGenre))
         }
 
+        /* Initialize Spinner */
+        spinner = binding.spinnerGenre
+        ArrayAdapter.createFromResource(
+            requireActivity(),
+            R.array.spinnerOpt,
+            android.R.layout.simple_spinner_item
+        ). also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+        spinner.onItemSelectedListener = object: OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                spinnerSelectedOption = resources.getStringArray(R.array.spinnerOpt)[p2]
+                spinnerSelectedId = p2
+                saveButton?.isEnabled = validateFields()
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
+        
         dialog = if(newAlbum){
             /* Create */
             buildDialog("Guardar", "Cancelar", {
-                album.albumTitle = binding.tfAlbumTitle.text.toString()
-                album.albumArtist = binding.tfAlbumArtist.text.toString()
-                album.albumYear = binding.tfAlbumYear.text.toString()
-                album.albumSongs = binding.tfAlbumSongs.text.toString().toInt()
+
+                album.apply {
+                    albumTitle = binding.tfAlbumTitle.text.toString()
+                    albumArtist = binding.tfAlbumArtist.text.toString()
+                    albumYear = binding.tfAlbumYear.text.toString()
+                    albumSongs = binding.tfAlbumSongs.text.toString()
+                    albumGenre = spinnerSelectedOption.toString()
+                }
 
                 try{
                     lifecycleScope.launch {
@@ -76,11 +107,17 @@ class AlbumDialog(
             })
         }else{
             /* Update */
+
+            spinner.setSelection(resources.getStringArray(R.array.spinnerOpt).indexOf(album.albumGenre))
+
             buildDialog("Actualizar", "Borrar",{
-                album.albumTitle = binding.tfAlbumTitle.text.toString()
-                album.albumArtist = binding.tfAlbumArtist.text.toString()
-                album.albumYear = binding.tfAlbumYear.text.toString()
-                album.albumSongs = binding.tfAlbumSongs.text.toString().toInt()
+                album.apply {
+                    albumTitle = binding.tfAlbumTitle.text.toString()
+                    albumArtist = binding.tfAlbumArtist.text.toString()
+                    albumYear = binding.tfAlbumYear.text.toString()
+                    albumSongs = binding.tfAlbumSongs.text.toString()
+                    album.albumGenre = spinnerSelectedOption.toString()
+                }
 
                 try{
                     lifecycleScope.launch {
@@ -116,7 +153,6 @@ class AlbumDialog(
                     .show()
             })
         }
-
         return dialog
     }
 
@@ -185,7 +221,9 @@ class AlbumDialog(
             binding.tfAlbumTitle.text.toString().isNotEmpty() &&
             binding.tfAlbumArtist.text.toString().isNotEmpty() &&
             binding.tfAlbumYear.text.toString().isNotEmpty() &&
-            binding.tfAlbumSongs.text.toString().isNotEmpty())
+            binding.tfAlbumSongs.text.toString().isNotEmpty() &&
+            spinnerSelectedId != 0 &&
+            spinnerSelectedId != resources.getStringArray(R.array.spinnerOpt).indexOf(album.albumGenre))
 
     private fun buildDialog(btn1: String, btn2: String, positiveButton: () -> Unit, negativeButton: () -> Unit): Dialog =
         builder.setView(binding.root)
@@ -197,4 +235,17 @@ class AlbumDialog(
                 negativeButton()
             }
             .create()
+
+    fun imageSelection(image: String): Int{
+        return when(image){
+            "Brit Pop" -> R.drawable.britpop
+            "Rock" -> R.drawable.rock
+            "Metal" -> R.drawable.metal
+            "House" -> R.drawable.house
+            "Electronic" -> R.drawable.electronic
+            "Indie" -> R.drawable.indie
+            "Jazz" -> R.drawable.jazz
+            else -> R.drawable.headphones
+        }
+    }
 }

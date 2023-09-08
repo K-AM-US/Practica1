@@ -60,8 +60,6 @@ class MainActivity : AppCompatActivity() {
         dialog.show(supportFragmentManager, "dialog")
     }
 
-
-
     private fun albumClicked(album: AlbumEntity){
         val dialog = AlbumDialog(newAlbum = false, album = album, updateUI = {
             updateUI()

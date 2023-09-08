@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="purple">#8C2BEC</color>
     <color name="cardViewBackground">#B49EE9</color>
+    <color name="backgroundScreen">#5F537A</color>
 </resources>

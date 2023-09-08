@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:padding="15dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/headphones" />
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -111,8 +111,9 @@
         app:cardCornerRadius="18dp">
 
         <Spinner
+            android:id="@+id/spinnerGenre"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:entries="@array/spinnerOpt"/>
 
     </androidx.cardview.widget.CardView>

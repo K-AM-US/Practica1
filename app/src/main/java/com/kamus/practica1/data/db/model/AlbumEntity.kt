@@ -21,7 +21,7 @@ data class AlbumEntity(
     var albumYear: String,
 
     @ColumnInfo(name = "album_songs")
-    var albumSongs: Int,
+    var albumSongs: String,
 
     @ColumnInfo(name = "album_genre")
     var albumGenre: String
