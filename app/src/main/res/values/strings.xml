@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Practica 1</string>
 
+    <!-- Spinner Options -->
     <string-array name="spinnerOpt">
         <item></item>
         <item>Brit Pop</item>
@@ -11,4 +12,35 @@
         <item>Indie</item>
         <item>Jazz</item>
     </string-array>
+
+    <!-- Buttons -->
+    <string name="buttonCreate">Guardar</string>
+    <string name="buttonCancel">Cancelar</string>
+    <string name="buttonUpdate">Actualizar</string>
+    <string name="buttonDelete">Borrar</string>
+    <string name="positiveButton">Aceptar</string>
+
+    <!-- Messages -->
+    <string name="saved">Album guardado exitosamente</string>
+    <string name="saveError">Error al guardar el Album</string>
+    <string name="updated">Album actualizado correctamente</string>
+    <string name="updateError">Error al actualizar el Album</string>
+    <string name="delete">Album Eliminado exitosamente</string>
+    <string name="deleteError">Error al eliminar el Album</string>
+    
+    <!-- Dialog -->
+    <string name="dialogConfirmationTitle">Confirmación</string>
+    <string name="dialogConfirmationMessage">¿Realmente quieres eliminar el album %1$s?</string>
+    <string name="dialogCreateTitle">Album</string>
+
+    <!-- Activity Main -->
+    <string name="empty">No hay registros</string>
+    <string name="btnAddDescription">Add a new register</string>
+
+    <!-- Hints -->
+    <string name="title">Título</string>
+    <string name="artist">Artista</string>
+    <string name="year">Año</string>
+    <string name="songs">Número de canciones</string>
+    <string name="temporal_genre_icon">Temporal genre icon</string>
 </resources>

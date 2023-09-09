@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:padding="15dp"
-        android:src="@drawable/headphones" />
+        android:src="@drawable/headphones"
+        android:contentDescription="@string/temporal_genre_icon"/>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -19,12 +20,13 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:hint="Title"
+        android:hint="@string/title"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusTopStart="12dp">
+        app:boxCornerRadiusTopStart="12dp"
+        app:startIconDrawable="@drawable/ic_album">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfAlbumTitle"
@@ -32,7 +34,7 @@
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
             android:inputType="text"
-            android:maxLines="1"/>
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -43,11 +45,12 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:hint="Artist"
+        android:hint="@string/artist"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusTopStart="12dp">
+        app:boxCornerRadiusTopStart="12dp"
+        app:startIconDrawable="@drawable/ic_band">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfAlbumArtist"
@@ -55,7 +58,7 @@
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
             android:inputType="text"
-            android:maxLines="1"/>
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -65,19 +68,20 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:hint="Year"
+        android:hint="@string/year"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusTopStart="12dp">
+        app:boxCornerRadiusTopStart="12dp"
+        app:startIconDrawable="@drawable/baseline_calendar_month_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfAlbumYear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
-            android:inputType="text"
-            android:maxLines="1"/>
+            android:inputType="number"
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -87,19 +91,20 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:hint="Number of songs "
+        android:hint="@string/songs"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusTopStart="12dp">
+        app:boxCornerRadiusTopStart="12dp"
+        app:startIconDrawable="@drawable/ic_songs">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfAlbumSongs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
-            android:inputType="text"
-            android:maxLines="1"/>
+            android:inputType="number"
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,7 +119,7 @@
             android:id="@+id/spinnerGenre"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:entries="@array/spinnerOpt"/>
+            android:entries="@array/spinnerOpt" />
 
     </androidx.cardview.widget.CardView>
 

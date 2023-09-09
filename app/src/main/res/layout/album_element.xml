@@ -21,18 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!--<ImageView
-                android:id="@+id/albumImage"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:padding="7dp"
-                android:outlineProvider="bounds"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />-->
-
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/albumImage"
                 android:layout_width="60dp"

@@ -1,12 +1,12 @@
 package com.kamus.practica1.ui
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.kamus.practica1.R
 import com.kamus.practica1.application.AlbumsDBApp
 import com.kamus.practica1.data.AlbumRepository
 import com.kamus.practica1.data.db.model.AlbumEntity
@@ -28,9 +28,11 @@ class MainActivity : AppCompatActivity() {
 
         repository = (application as AlbumsDBApp).repository
 
-        albumAdapter = AlbumAdapter() {
+        albumAdapter = AlbumAdapter( {
             album -> albumClicked(album)
-        }
+        },{ image ->
+            imageSelection(image)
+        })
 
         binding.rvAlbum.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -56,6 +58,8 @@ class MainActivity : AppCompatActivity() {
             updateUI()
         }, message = { text ->
             message(text)
+        }, imageSelection = {image ->
+            imageSelection(image)
         })
         dialog.show(supportFragmentManager, "dialog")
     }
@@ -65,14 +69,30 @@ class MainActivity : AppCompatActivity() {
             updateUI()
         }, message = { text ->
             message(text)
-        })
+        }, imageSelection = { image ->
+            imageSelection(image)
+        }
+            )
         dialog.show(supportFragmentManager, "dialog")
     }
 
     private fun message(text: String){
         Snackbar.make(binding.cl, text, Snackbar.LENGTH_SHORT)
-            .setTextColor(Color.parseColor("#FFFFFF"))
-            .setBackgroundTint(Color.parseColor("#9E1734"))
+            .setTextColor(getColor(R.color.messageTextColor))
+            .setBackgroundTint(getColor(R.color.messageBackground))
             .show()
+    }
+
+    private fun imageSelection(image: String): Int{
+        return when(image){
+            "Brit Pop" -> R.drawable.britpop
+            "Rock" -> R.drawable.rock
+            "Metal" -> R.drawable.metal
+            "House" -> R.drawable.house
+            "Electronic" -> R.drawable.electronic
+            "Indie" -> R.drawable.indie
+            "Jazz" -> R.drawable.jazz
+            else -> R.drawable.headphones
+        }
     }
 }

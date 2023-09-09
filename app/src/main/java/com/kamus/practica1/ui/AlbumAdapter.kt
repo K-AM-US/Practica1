@@ -3,16 +3,18 @@ package com.kamus.practica1.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.kamus.practica1.R
 import com.kamus.practica1.data.db.model.AlbumEntity
 import com.kamus.practica1.databinding.AlbumElementBinding
 
-class AlbumAdapter(private val onAlbumClick: (AlbumEntity) -> Unit): RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
+class AlbumAdapter(
+    private val onAlbumClick: (AlbumEntity) -> Unit,
+    private val imageSelection: (String) -> Int
+): RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 
     private var albums: List<AlbumEntity> = emptyList()
 
     class ViewHolder(private val binding: AlbumElementBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(album: AlbumEntity){
+        fun bind(album: AlbumEntity, imageSelection: (String) -> Int){
             binding.apply {
                 albumTitle.text = album.albumTitle
                 albumArtist.text = album.albumArtist
@@ -21,19 +23,6 @@ class AlbumAdapter(private val onAlbumClick: (AlbumEntity) -> Unit): RecyclerVie
                 albumSongs.text = album.albumSongs
             }
             binding.albumImage.setImageResource(imageSelection(album.albumGenre))
-        }
-
-        fun imageSelection(image: String): Int{
-            return when(image){
-                "Brit Pop" -> R.drawable.britpop
-                "Rock" -> R.drawable.rock
-                "Metal" -> R.drawable.metal
-                "House" -> R.drawable.house
-                "Electronic" -> R.drawable.electronic
-                "Indie" -> R.drawable.indie
-                "Jazz" -> R.drawable.jazz
-                else -> R.drawable.headphones
-            }
         }
     }
 
@@ -46,7 +35,9 @@ class AlbumAdapter(private val onAlbumClick: (AlbumEntity) -> Unit): RecyclerVie
     override fun getItemCount(): Int = albums.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(albums[position])
+        holder.bind(albums[position], imageSelection = {image ->
+            imageSelection(image)
+        })
 
 
         holder.itemView.setOnClickListener {
@@ -58,7 +49,4 @@ class AlbumAdapter(private val onAlbumClick: (AlbumEntity) -> Unit): RecyclerVie
         albums = list
         notifyDataSetChanged()
     }
-
-
-
 }

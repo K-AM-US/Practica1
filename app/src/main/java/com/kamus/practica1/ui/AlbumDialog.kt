@@ -12,7 +12,6 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.kamus.practica1.R
@@ -33,7 +32,8 @@ class AlbumDialog(
         albumSongs = ""
     ),
     private val updateUI: () -> Unit,
-    private val message: (String) -> Unit
+    private val message: (String) -> Unit,
+    private val imageSelection: (String) -> Int
 ): DialogFragment() {
     private var _binding: AlbumDialogBinding? = null
     private val binding get() = _binding!!
@@ -74,7 +74,7 @@ class AlbumDialog(
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 spinnerSelectedOption = resources.getStringArray(R.array.spinnerOpt)[p2]
                 spinnerSelectedId = p2
-                saveButton?.isEnabled = validateFields()
+                saveButton?.isEnabled = validateFields(newAlbum)
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
@@ -82,7 +82,7 @@ class AlbumDialog(
         
         dialog = if(newAlbum){
             /* Create */
-            buildDialog("Guardar", "Cancelar", {
+            buildDialog(getString(R.string.buttonCreate), getString(R.string.buttonCancel), {
 
                 album.apply {
                     albumTitle = binding.tfAlbumTitle.text.toString()
@@ -96,11 +96,11 @@ class AlbumDialog(
                     lifecycleScope.launch {
                         repository.insertAlbum(album)
                     }
-                    message("Juego guardado exitosamente")
+                    message(getString(R.string.saved))
                     updateUI()
                 }catch (e: IOException){
                     e.printStackTrace()
-                    message("error al guardar el juego")
+                    message(getString(R.string.saveError))
                 }
             },{
                 /* Cancelar */
@@ -110,7 +110,7 @@ class AlbumDialog(
 
             spinner.setSelection(resources.getStringArray(R.array.spinnerOpt).indexOf(album.albumGenre))
 
-            buildDialog("Actualizar", "Borrar",{
+            buildDialog(getString(R.string.buttonUpdate), getString(R.string.buttonDelete),{
                 album.apply {
                     albumTitle = binding.tfAlbumTitle.text.toString()
                     albumArtist = binding.tfAlbumArtist.text.toString()
@@ -123,30 +123,32 @@ class AlbumDialog(
                     lifecycleScope.launch {
                         repository.updateAlbum(album)
                     }
-                    message("Juego actualizado exitosamente")
+                    message(getString(R.string.updated))
                     updateUI()
                 }catch (e: IOException){
                     e.printStackTrace()
-                    message("Error al actualizar el juego")
+                    message(getString(R.string.updateError))
                 }
             },{
                 /* Delete */
                 AlertDialog.Builder(requireContext())
-                    .setTitle("Confirmación")
-                    .setMessage("¿Realmente quieres eliminar el album ${album.albumTitle}?")
-                    .setPositiveButton("Aceptar"){ _, _ ->
+                    .setTitle(getString(R.string.dialogConfirmationTitle))
+                    .setMessage(getString(R.string.dialogConfirmationMessage, album.albumTitle))
+                    .setPositiveButton(getString(R.string.positiveButton)){ _, _ ->
                         try{
                             lifecycleScope.launch {
                                 repository.deleteAlbum(album)
                             }
-                            message("Juego eliminado exitosamente")
+                            activity?.let {
+                                message(it.getString(R.string.delete))
+                            }
                             updateUI()
                         }catch (e: IOException){
                             e.printStackTrace()
-                            message("Error al eliminar el juego")
+                            message(getString(R.string.deleteError))
                         }
                     }
-                    .setNegativeButton("Cancelar"){ dialog, _ ->
+                    .setNegativeButton(getString(R.string.buttonCancel)){ dialog, _ ->
                         dialog.dismiss()
                     }
                     .create()
@@ -165,7 +167,7 @@ class AlbumDialog(
         super.onStart()
 
         val alertDialog = dialog as AlertDialog
-        saveButton = alertDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)
+        saveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
         saveButton?.isEnabled = false
 
         binding.tfAlbumTitle.addTextChangedListener(object: TextWatcher{
@@ -176,7 +178,7 @@ class AlbumDialog(
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                saveButton?.isEnabled = validateFields()
+                saveButton?.isEnabled = validateFields(newAlbum)
             }
         })
 
@@ -188,7 +190,7 @@ class AlbumDialog(
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                saveButton?.isEnabled = validateFields()
+                saveButton?.isEnabled = validateFields(newAlbum)
             }
         })
 
@@ -200,7 +202,7 @@ class AlbumDialog(
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                saveButton?.isEnabled = validateFields()
+                saveButton?.isEnabled = validateFields(newAlbum)
             }
         })
 
@@ -212,40 +214,39 @@ class AlbumDialog(
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                saveButton?.isEnabled = validateFields()
+                saveButton?.isEnabled = validateFields(newAlbum)
             }
         })
     }
 
-    private fun validateFields() = (
-            binding.tfAlbumTitle.text.toString().isNotEmpty() &&
+    private fun validateFields(newAlbum: Boolean): Boolean{
+        return if(newAlbum){
+            (binding.tfAlbumTitle.text.toString().isNotEmpty() &&
+             binding.tfAlbumArtist.text.toString().isNotEmpty() &&
+             binding.tfAlbumYear.text.toString().isNotEmpty() &&
+             binding.tfAlbumSongs.text.toString().isNotEmpty() &&
+             spinnerSelectedId != 0)
+        }else{
+            (binding.tfAlbumTitle.text.toString().isNotEmpty() &&
             binding.tfAlbumArtist.text.toString().isNotEmpty() &&
             binding.tfAlbumYear.text.toString().isNotEmpty() &&
             binding.tfAlbumSongs.text.toString().isNotEmpty() &&
-            spinnerSelectedId != 0 &&
-            spinnerSelectedId != resources.getStringArray(R.array.spinnerOpt).indexOf(album.albumGenre))
+            spinnerSelectedId != 0)
+        }
+
+    }
+
+
+
 
     private fun buildDialog(btn1: String, btn2: String, positiveButton: () -> Unit, negativeButton: () -> Unit): Dialog =
         builder.setView(binding.root)
-            .setTitle("Album")
-            .setPositiveButton(btn1, DialogInterface.OnClickListener { _, _ ->
+            .setTitle(getString(R.string.dialogCreateTitle))
+            .setPositiveButton(btn1) { _, _ ->
                 positiveButton()
-            })
+            }
             .setNegativeButton(btn2){ _, _ ->
                 negativeButton()
             }
             .create()
-
-    fun imageSelection(image: String): Int{
-        return when(image){
-            "Brit Pop" -> R.drawable.britpop
-            "Rock" -> R.drawable.rock
-            "Metal" -> R.drawable.metal
-            "House" -> R.drawable.house
-            "Electronic" -> R.drawable.electronic
-            "Indie" -> R.drawable.indie
-            "Jazz" -> R.drawable.jazz
-            else -> R.drawable.headphones
-        }
-    }
 }
