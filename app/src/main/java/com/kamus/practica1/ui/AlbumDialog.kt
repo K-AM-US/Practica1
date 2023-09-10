@@ -12,6 +12,8 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.Toast
+import androidx.core.view.get
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.kamus.practica1.R
@@ -74,7 +76,11 @@ class AlbumDialog(
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 spinnerSelectedOption = resources.getStringArray(R.array.spinnerOpt)[p2]
                 spinnerSelectedId = p2
-                saveButton?.isEnabled = validateFields(newAlbum)
+
+                if(newAlbum)
+                    saveButton?.isEnabled = validateFields()
+                else
+                    saveButton?.isEnabled = validateUpdatedFields()
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
@@ -107,7 +113,6 @@ class AlbumDialog(
             })
         }else{
             /* Update */
-
             spinner.setSelection(resources.getStringArray(R.array.spinnerOpt).indexOf(album.albumGenre))
 
             buildDialog(getString(R.string.buttonUpdate), getString(R.string.buttonDelete),{
@@ -166,6 +171,7 @@ class AlbumDialog(
     override fun onStart() {
         super.onStart()
 
+
         val alertDialog = dialog as AlertDialog
         saveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
         saveButton?.isEnabled = false
@@ -178,7 +184,10 @@ class AlbumDialog(
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                saveButton?.isEnabled = validateFields(newAlbum)
+                if(newAlbum)
+                    saveButton?.isEnabled = validateFields()
+                else
+                    saveButton?.isEnabled = validateUpdatedFields()
             }
         })
 
@@ -190,7 +199,10 @@ class AlbumDialog(
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                saveButton?.isEnabled = validateFields(newAlbum)
+                if(newAlbum)
+                    saveButton?.isEnabled = validateFields()
+                else
+                    saveButton?.isEnabled = validateUpdatedFields()
             }
         })
 
@@ -202,7 +214,10 @@ class AlbumDialog(
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                saveButton?.isEnabled = validateFields(newAlbum)
+                if(newAlbum)
+                    saveButton?.isEnabled = validateFields()
+                else
+                    saveButton?.isEnabled = validateUpdatedFields()
             }
         })
 
@@ -214,31 +229,25 @@ class AlbumDialog(
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                saveButton?.isEnabled = validateFields(newAlbum)
+                if(newAlbum)
+                    saveButton?.isEnabled = validateFields()
+                else
+                    saveButton?.isEnabled = validateUpdatedFields()
             }
         })
     }
 
-    private fun validateFields(newAlbum: Boolean): Boolean{
-        return if(newAlbum){
-            (binding.tfAlbumTitle.text.toString().isNotEmpty() &&
-             binding.tfAlbumArtist.text.toString().isNotEmpty() &&
-             binding.tfAlbumYear.text.toString().isNotEmpty() &&
-             binding.tfAlbumSongs.text.toString().isNotEmpty() &&
-             spinnerSelectedId != 0)
-        }else{
-            (binding.tfAlbumTitle.text.toString().isNotEmpty() &&
-            binding.tfAlbumArtist.text.toString().isNotEmpty() &&
-            binding.tfAlbumYear.text.toString().isNotEmpty() &&
-            binding.tfAlbumSongs.text.toString().isNotEmpty() &&
-            spinnerSelectedId != 0)
-        }
-
-    }
-
-
-
-
+    private fun validateFields(): Boolean =  binding.tfAlbumTitle.text.toString().isNotEmpty() &&
+                                             binding.tfAlbumArtist.text.toString().isNotEmpty() &&
+                                             binding.tfAlbumYear.text.toString().isNotEmpty() &&
+                                             binding.tfAlbumSongs.text.toString().isNotEmpty() &&
+                                             spinnerSelectedId != 0
+    private fun validateUpdatedFields(): Boolean = album.albumTitle != binding.tfAlbumTitle.text.toString() ||
+                                                   album.albumArtist != binding.tfAlbumArtist.text.toString() ||
+                                                   album.albumYear != binding.tfAlbumYear.text.toString() ||
+                                                   album.albumSongs != binding.tfAlbumSongs.text.toString() ||
+                                                   album.albumGenre != spinnerSelectedOption &&
+                                                   spinnerSelectedId != 0
     private fun buildDialog(btn1: String, btn2: String, positiveButton: () -> Unit, negativeButton: () -> Unit): Dialog =
         builder.setView(binding.root)
             .setTitle(getString(R.string.dialogCreateTitle))
